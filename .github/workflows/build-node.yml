@@ -1,0 +1,31 @@
+name: Build Minified Node.js
+on: [workflow_dispatch] # 手动点击运行
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Node.js Source
+        uses: actions/checkout@v4
+        with:
+          repository: nodejs/node
+          ref: v20.18.3 # 指定版本
+          fetch-depth: 1
+
+      - name: Install NASM
+        run: choco install nasm
+
+      - name: Build Node.js (Minified)
+        run: |
+          # 核心瘦身参数：
+          # release: 生产版本
+          # nosign: 不签名
+          # without-intl: 移除所有国际化数据 (砍掉 ~30MB)
+          # without-inspector: 移除调试器 (砍掉 ~5MB)
+          .\vcbuild.bat release x64 nosign without-intl without-inspector
+
+      - name: Upload Minified node.exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: minified-node-exe
+          path: out/Release/node.exe
