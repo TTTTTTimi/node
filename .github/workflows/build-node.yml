@@ -16,13 +16,15 @@ jobs:
         run: choco install nasm
 
       - name: Build Node.js (Minified)
+        shell: cmd
         run: |
-          # 核心瘦身参数：
-          # release: 生产版本
-          # nosign: 不签名
-          # without-intl: 移除所有国际化数据 (砍掉 ~30MB)
-          # without-inspector: 移除调试器 (砍掉 ~5MB)
-          .\vcbuild.bat release x64 nosign without-intl without-inspector
+          :: 使用 vcbuild.bat 的正确 Windows 参数格式
+          :: release: 生产版本
+          :: x64: 64位架构
+          :: no-intl: 移除所有国际化数据 (对应之前的 without-intl)
+          :: no-inspector: 移除调试器 (对应之前的 without-inspector)
+          .\vcbuild.bat release x64 no-intl no-inspector
+
 
       - name: Upload Minified node.exe
         uses: actions/upload-artifact@v4
