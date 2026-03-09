@@ -18,12 +18,8 @@ jobs:
       - name: Build Node.js (Minified)
         shell: cmd
         run: |
-          :: 使用 vcbuild.bat 的正确 Windows 参数格式
-          :: release: 生产版本
-          :: x64: 64位架构
-          :: no-intl: 移除所有国际化数据 (对应之前的 without-intl)
-          :: no-inspector: 移除调试器 (对应之前的 without-inspector)
-          .\vcbuild.bat release x64 no-intl no-inspector
+          :: 使用完整参数名称，确保 vcbuild 能正确识别并传给 python
+          .\vcbuild.bat release x64 without-intl without-inspector
 
 
       - name: Upload Minified node.exe
